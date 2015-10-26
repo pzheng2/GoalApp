@@ -5,6 +5,8 @@ feature "goal process" do
 
   before :each do
     visit "/users/new"
+
+
     fill_in "Username", with: 'ginger_baker'
     fill_in "Password", with: 'shorts'
     click_button 'Sign Up'
@@ -26,11 +28,16 @@ feature "goal process" do
   end
 
   it "shouldn't display private goals to others" do
-    user = User.create!(username: "test human", password: "testing")
-    user.goals.create!(title: "My Goal", private: true)
-    user.goals.create!(title: "PUBLICGOAL")
+    fill_in "Title", with: 'My Goal'
+    fill_in "Description", with: 'Finish this goal!'
+    click_button 'Create New Goal'
+    click_button 'Sign Out'
+    click_link 'Sign Up'
+    fill_in "Username", with: 'different_name'
+    fill_in "Password", with: 'shorts'
+    click_button 'Sign Up'
+    user = User.last
     visit user_url(user)
-    save_and_open_page
     expect(page).to_not have_content 'My Goal'
   end
 

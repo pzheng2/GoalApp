@@ -6,12 +6,12 @@
 <a href="<%= edit_goal_url(goal) %>">Edit Goal</a>
 
 <ul>
-<% goal.goal_comments.each do |goal_comment| %>
+<% goal.comments.each do |comment| %>
   <li>
-    <%= goal_comment.body %>
+    <%= comment.body %>
     <br>
-    <em>-<%= goal_comment.author.username %></em>
-    <form action="<%= goal_comment_url(goal_comment) %>" method="post">
+    <em>-<%= comment.author.username %></em>
+    <form action="<%= comment_url(comment) %>" method="post">
       <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
       <input type="hidden" name="_method" value="delete">
 
@@ -23,12 +23,14 @@
 </ul>
 
 <h5>Add Goal Comment</h5>
-<form action="<%= goal_comments_url %>" method="post">
+<form action="<%= comments_url %>" method="post">
   <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
 
-  <input type="hidden" name="goal_comment[goal_id]" value="<%= goal.id %>">
+  <input type="hidden" name="comment[commentable_id]" value="<%= goal.id %>">
+  <input type="hidden" name="comment[commentable_type]" value="Goal">
+
   <label>Goal Comment
-    <input type="textarea" name="goal_comment[body]">
+    <input type="textarea" name="comment[body]">
   </label>
 
   <input type="submit" value="Comment on Goal">

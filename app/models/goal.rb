@@ -2,6 +2,5 @@ class Goal < ActiveRecord::Base
   validates :title, :user_id, presence: true
 
   belongs_to :user
-  has_many :goal_comments
-  
+  has_many :comments, as: :commentable
 end

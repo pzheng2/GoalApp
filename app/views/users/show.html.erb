@@ -45,7 +45,7 @@
     <%= comment.body %>
     <br>
     -<em><%= comment.author.username %></em>
-    <form action="<%= user_comment_url(comment) %>" method="post">
+    <form action="<%= comment_url(comment) %>" method="post">
       <input type="hidden"name="_method" value="delete">
         <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
         <input type="submit" value="delete comment">
@@ -58,16 +58,17 @@
 
 <h3>Add a comment!</h3>
 
-  <form action="<%= user_comments_url %>" method="post">
+  <form action="<%= comments_url %>" method="post">
     <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
 
-    <input type="hidden" name="user_comment[user_id]" value="<%= @user.id %>">
+    <input type="hidden" name="comment[commentable_id]" value="<%= @user.id %>">
+    <input type="hidden" name="comment[commentable_type]" value="User">
 
     <label>
       Comment Body
       <br>
       <textarea
-        name="user_comment[body]"
+        name="comment[body]"
         rows="8"
         cols="40"
         placeholder="Describe your goal!"

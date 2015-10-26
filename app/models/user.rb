@@ -6,30 +6,23 @@ class User < ActiveRecord::Base
   validates :username, :session_token, uniqueness: true
   validates :password, length: { minimum: 6, allow_nil: true }
 
-  has_many :goals
-
   has_many(
-    :goal_comments,
-    class_name: "GoalComment",
+    :comments,
+    class_name: "Comment",
     foreign_key: :author_id,
     primary_key: :id
   )
 
-  # a user's comments on other users
-  has_many(
-    :user_comments,
-    class_name: "UserComment",
-    foreign_key: :author_id,
-    primary_key: :id
-    )
+  has_many :goals
 
   # comments on this user
   has_many(
     :profile_comments,
-    class_name: "UserComment",
-    foreign_key: :user_id,
+    as: :commentable,
+    class_name: "Comment",
+    foreign_key: :commentable_id,
     primary_key: :id
-    )
+  )
 
 
   def self.find_by_credentials(username, password)
