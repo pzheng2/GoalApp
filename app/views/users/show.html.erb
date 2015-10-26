@@ -8,6 +8,8 @@
   <% end %>
 </ul>
 
+<h3>Add a Goal!</h3>
+
 <form action="<%= goals_url %>" method="post">
   <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
 
@@ -36,3 +38,44 @@
   <input type="submit" value="Create New Goal">
 
 </form>
+
+<ul>
+<% @user.profile_comments.each do |comment| %>
+  <li>
+    <%= comment.body %>
+    <br>
+    -<em><%= comment.author.username %></em>
+    <form action="<%= user_comment_url(comment) %>" method="post">
+      <input type="hidden"name="_method" value="delete">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+        <input type="submit" value="delete comment">
+      </input>
+
+    </form>
+  </li>
+<% end %>
+</ul>
+
+<h3>Add a comment!</h3>
+
+  <form action="<%= user_comments_url %>" method="post">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+
+    <input type="hidden" name="user_comment[user_id]" value="<%= @user.id %>">
+
+    <label>
+      Comment Body
+      <br>
+      <textarea
+        name="user_comment[body]"
+        rows="8"
+        cols="40"
+        placeholder="Describe your goal!"
+        ></textarea>
+    </label>
+    <br>
+
+    <br>
+    <input type="submit" value="Comment">
+
+  </form>

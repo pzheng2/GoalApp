@@ -4,3 +4,33 @@
 <br>
 </li>
 <a href="<%= edit_goal_url(goal) %>">Edit Goal</a>
+
+<ul>
+<% goal.goal_comments.each do |goal_comment| %>
+  <li>
+    <%= goal_comment.body %>
+    <br>
+    <em>-<%= goal_comment.author.username %></em>
+    <form action="<%= goal_comment_url(goal_comment) %>" method="post">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <input type="hidden" name="_method" value="delete">
+
+      <input type="submit" value="delete goal comment">
+
+    </form>
+  </li>
+<% end %>
+</ul>
+
+<h5>Add Goal Comment</h5>
+<form action="<%= goal_comments_url %>" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+
+  <input type="hidden" name="goal_comment[goal_id]" value="<%= goal.id %>">
+  <label>Goal Comment
+    <input type="textarea" name="goal_comment[body]">
+  </label>
+
+  <input type="submit" value="Comment on Goal">
+
+</form>
