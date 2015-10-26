@@ -8,36 +8,39 @@
   <% end %>
 </ul>
 
-<h3>Add a Goal!</h3>
+<% if current_user == @user %>
+  <h3>Add a Goal!</h3>
 
-<form action="<%= goals_url %>" method="post">
-  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <form action="<%= goals_url %>" method="post">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
 
-  <label>
-    Title
-    <input type="text" name="goal[title]">
-  </label>
-  <br>
-  <label>
-    Description
+    <label>
+      Title
+      <input type="text" name="goal[title]">
+    </label>
     <br>
-    <textarea
-      name="goal[description]"
-      rows="8"
-      cols="40"
-      placeholder="Describe your goal!"
-      ></textarea>
-  </label>
-  <br>
+    <label>
+      Description
+      <br>
+      <textarea
+        name="goal[description]"
+        rows="8"
+        cols="40"
+        placeholder="Describe your goal!"
+        ></textarea>
+    </label>
+    <br>
 
-  <label>
-    Private
-    <input type="checkbox" name="goal[private]" value="true">
-  </label>
-  <br>
-  <input type="submit" value="Create New Goal">
+    <label>
+      Private
+      <input type="checkbox" name="goal[private]" value="true">
+    </label>
+    <br>
+    <input type="submit" value="Create New Goal">
 
-</form>
+  </form>
+<% end %>
+
 
 <ul>
 <% @user.profile_comments.each do |comment| %>
@@ -45,13 +48,15 @@
     <%= comment.body %>
     <br>
     -<em><%= comment.author.username %></em>
-    <form action="<%= comment_url(comment) %>" method="post">
-      <input type="hidden"name="_method" value="delete">
-        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-        <input type="submit" value="delete comment">
-      </input>
+    <% if current_user == comment.author %>
+      <form action="<%= comment_url(comment) %>" method="post">
+        <input type="hidden"name="_method" value="delete">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <input type="submit" value="delete comment">
+        </input>
 
-    </form>
+      </form>
+    <% end %>
   </li>
 <% end %>
 </ul>

@@ -3,21 +3,22 @@
 <%= goal.description %>
 <br>
 </li>
-<a href="<%= edit_goal_url(goal) %>">Edit Goal</a>
-
+<% if current_user == goal.user %>
+  <a href="<%= edit_goal_url(goal) %>">Edit Goal</a>
+<% end %>
 <ul>
 <% goal.comments.each do |comment| %>
   <li>
     <%= comment.body %>
     <br>
     <em>-<%= comment.author.username %></em>
-    <form action="<%= comment_url(comment) %>" method="post">
-      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-      <input type="hidden" name="_method" value="delete">
-
-      <input type="submit" value="delete goal comment">
-
-    </form>
+    <% if current_user == comment.author %>
+      <form action="<%= comment_url(comment) %>" method="post">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+        <input type="hidden" name="_method" value="delete">
+        <input type="submit" value="delete goal comment">
+      </form>
+    <% end %>
   </li>
 <% end %>
 </ul>
