@@ -18,7 +18,21 @@ feature "goal process" do
     expect(page).to have_button "Create New Goal"
   end
 
-  it "should list all goals"
+  it "should list goals" do
+    fill_in "Title", with: 'My Goal'
+    fill_in "Description", with: 'Finish this goal!'
+    click_button 'Create New Goal'
+    expect(page).to have_content "My Goal"
+  end
+
+  it "shouldn't display private goals to others" do
+    user = User.create!(username: "test human", password: "testing")
+    user.goals.create!(title: "My Goal", private: true)
+    user.goals.create!(title: "PUBLICGOAL")
+    visit user_url(user)
+    save_and_open_page
+    expect(page).to_not have_content 'My Goal'
+  end
 
 
 end

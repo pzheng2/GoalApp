@@ -1,5 +1,6 @@
 <li>
-Title: <%= goal.title %>
-Description: <%= goal.description %>
-Completed: <%= goal.completed %>
+<h4>Title: <%= goal.title %> <%= "√" if goal.completed %></h4>
+<%= goal.description %>
+<br>
 </li>
+<a href="<%= edit_goal_url(goal) %>">Edit Goal</a>
