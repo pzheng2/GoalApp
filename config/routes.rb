@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   root 'sessions#new'
 
+  resources :cheers, only: [:create, :destroy]
   resources :comments, only: [:create, :destroy]
   # resources :user_comments, only: [:create, :destroy]
   resources :goal_comments, only: [:create, :destroy]

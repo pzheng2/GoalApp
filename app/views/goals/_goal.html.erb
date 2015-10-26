@@ -1,11 +1,43 @@
 <li>
-<h4>Title: <%= goal.title %> <%= "√" if goal.completed %></h4>
+<h4>Title: <%= goal.title %>
+  <% if goal.completed  %>
+    <%= "√" %>
+  <% elsif goal.user == current_user %>
+    <form action="<%= goal_url(goal) %>" method="post">
+      <input type="hidden" name="_method" value="patch">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <input type="hidden" name="goal[completed]" value="true">
+      <input type="submit" value="Complete goal!">
+    </form>
+  <% end %>
+  </h4>
 <%= goal.description %>
 <br>
+<h5>
+  Cheers: <%= goal.cheers.count %>
+</h5>
+<br>
 </li>
+
 <% if current_user == goal.user %>
   <a href="<%= edit_goal_url(goal) %>">Edit Goal</a>
+<% else %>
+  <% if current_user.cheered_goals.include?(goal) %>
+  <% cheer = current_user.cheers.where(goal_id: goal.id).first %>
+    <form action="<%= cheer_url(cheer) %>" method="post">
+      <input type="hidden" name="_method" value="delete">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <input type="submit" value="Uncheer">
+    </form>
+  <% else %>
+    <form action="<%= cheers_url %>" method="post">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <input type="hidden" name="cheer[goal_id]" value="<%= goal.id %>">
+      <input type="submit" value="Cheer">
+    </form>
+    <% end %>
 <% end %>
+
 <ul>
 <% goal.comments.each do |comment| %>
   <li>

@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  MAX_CHEERS = 5
   attr_reader :password
 
   after_initialize :ensure_session_token
@@ -12,6 +13,14 @@ class User < ActiveRecord::Base
     foreign_key: :author_id,
     primary_key: :id
   )
+
+  has_many :cheers
+
+  has_many(
+    :cheered_goals,
+    through: :cheers,
+    source: :goal
+    )
 
   has_many :goals
 
@@ -47,6 +56,10 @@ class User < ActiveRecord::Base
 
   def public_goals
     self.goals.where(private: false)
+  end
+
+  def remaining_cheers
+    MAX_CHEERS - self.cheers.count
   end
 
   private
